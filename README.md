@@ -1,28 +1,55 @@
-# Flutter Page Flip Animation
+<div align="center">
 
-A beautiful and interactive page flip animation implementation in Flutter that demonstrates day/night theme switching with smooth transitions and gesture controls.
+# 🌓 Flutter Page Flip Animation
 
-## 🌟 Features
-
-- Smooth page flip animation
-- Interactive touch/drag gestures
-- Day/Night theme transition
-- SVG asset integration
-- Responsive design
-- Custom animations
-
-## 📱 Demo
-
-### Animation Demo
-![App Demo](assets/samples/flipIntro.gif)
-
-### Screenshots
-<p float="left">
-  <img src="assets/samples/Screenshot 2025-02-10 163249.png" width="250" alt="Day Theme" />
-  <img src="assets/samples/Screenshot 2025-02-10 163257.png" width="250" alt="Night Theme" />
+<p align="center">
+  <img src="assets/samples/flipIntro.gif" alt="App Demo" width="300"/>
 </p>
 
-## 🛠️ Project Structure
+A stunning implementation of page flip animation in Flutter featuring seamless day/night transitions, fluid gestures, and beautiful SVG illustrations.
+
+[![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev/)
+[![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev/)
+
+</div>
+
+---
+
+## ✨ Features
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">🎭 Theme Switch</td>
+      <td align="center">🎨 SVG Graphics</td>
+      <td align="center">📱 Responsive</td>
+    </tr>
+    <tr>
+      <td align="center">🔄 3D Flip</td>
+      <td align="center">👆 Gesture Control</td>
+      <td align="center">⚡ Smooth Animation</td>
+    </tr>
+  </table>
+</div>
+
+## 📱 Preview
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><strong>Day Mode</strong></td>
+      <td align="center"><strong>Night Mode</strong></td>
+    </tr>
+    <tr>
+      <td><img src="assets/samples/Screenshot 2025-02-10 163249.png" width="300" alt="Day Theme"/></td>
+      <td><img src="assets/samples/Screenshot 2025-02-10 163257.png" width="300" alt="Night Theme"/></td>
+    </tr>
+  </table>
+</div>
+
+## 🛠️ Technical Implementation
+
+### Project Structure
 
 This project is a starting point for a Flutter application.
 

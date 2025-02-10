@@ -13,9 +13,8 @@ class _PageFlipState extends State<PageFlip>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool _showFrontSide = true;
-  
-  // Add drag threshold
   final double _flipThreshold = 0.3;
+  double _dragStartX = 0;
 
   @override
   void initState() {
@@ -41,28 +40,55 @@ class _PageFlipState extends State<PageFlip>
     }
   }
 
-  // Add drag handling methods
+  void _onHorizontalDragStart(DragStartDetails details) {
+    _dragStartX = details.globalPosition.dx;
+  }
+
   void _onHorizontalDragUpdate(DragUpdateDetails details) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final dragPercentage = (details.primaryDelta ?? 0) / screenWidth;
+    final currentX = details.globalPosition.dx;
+    final dragDistance = currentX - _dragStartX;
+    final dragPercentage = (dragDistance / screenWidth).clamp(-1.0, 1.0);
     
     if (_showFrontSide) {
-      _controller.value += dragPercentage;
+      _controller.value = dragPercentage.abs();
     } else {
-      _controller.value -= dragPercentage;
+      _controller.value = 1 - dragPercentage.abs();
     }
   }
 
   void _onHorizontalDragEnd(DragEndDetails details) {
-    if (_controller.value >= _flipThreshold) {
+    final velocity = details.primaryVelocity ?? 0;
+    
+    if (velocity.abs() > 300) {
+      if (velocity < 0) {
+        _completeFlip();
+      } else {
+        _resetFlip();
+      }
+      return;
+    }
+
+    if (_controller.value > _flipThreshold) {
+      _completeFlip();
+    } else {
+      _resetFlip();
+    }
+  }
+
+  void _completeFlip() {
+    if (_showFrontSide) {
       _controller.forward().then((_) {
         setState(() => _showFrontSide = false);
       });
-    } else if (_controller.value <= (1 - _flipThreshold)) {
-      _controller.reverse().then((_) {
-        setState(() => _showFrontSide = true);
-      });
-    } else if (_showFrontSide) {
+    } else {
+      setState(() => _showFrontSide = true);
+      _controller.reverse();
+    }
+  }
+
+  void _resetFlip() {
+    if (_showFrontSide) {
       _controller.reverse();
     } else {
       _controller.forward();
@@ -72,26 +98,27 @@ class _PageFlipState extends State<PageFlip>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onHorizontalDragStart: _onHorizontalDragStart,
       onHorizontalDragUpdate: _onHorizontalDragUpdate,
       onHorizontalDragEnd: _onHorizontalDragEnd,
       child: AnimatedBuilder(
         animation: _controller,
         builder: (context, child) {
           final angle = _controller.value * pi;
-          final transform = Matrix4.identity()
-            ..setEntry(3, 2, 0.001)
-            ..rotateY(angle);
+          final isBackSide = angle >= (pi / 2);
 
           return Transform(
-            transform: transform,
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.001)
+              ..rotateY(angle),
             alignment: Alignment.center,
-            child: _showFrontSide
-                ? LightHomePage(onFlip: _flip)
-                : Transform(
+            child: isBackSide
+                ? Transform(
                     transform: Matrix4.identity()..rotateY(pi),
                     alignment: Alignment.center,
                     child: DarkHomePage(onFlip: _flip),
-                  ),
+                  )
+                : LightHomePage(onFlip: _flip),
           );
         },
       ),
